@@ -6,9 +6,9 @@ import std/strformat
 
 proc calcChromaticPolynormal*(
     graph: Graph,
+    pd: ProgressData = newProgressData(),
     coefs: seq[int] = @[],
-    depth: int = 0,
-    pd: ProgressData = new ProgressData): seq[int] =
+    depth: int = 0): seq[int] =
   ## returns a sequence of coefficients for the chromatic polynomial of the graph
 
   # init coef
@@ -28,8 +28,8 @@ proc calcChromaticPolynormal*(
     let ct = newGraph(verticies, edges)
     ct.contract(edge)
 
-    var res1: seq[int] = calcChromaticPolynormal(sc, coefficients, depth + 1, pd)
-    var res2: seq[int] = calcChromaticPolynormal(ct, coefficients, depth + 1, pd)
+    var res1: seq[int] = calcChromaticPolynormal(sc, pd, coefficients, depth + 1)
+    var res2: seq[int] = calcChromaticPolynormal(ct, pd, coefficients, depth + 1)
 
     var res: seq[int] = @[]
     for i, t in zip(res1, res2):
@@ -71,9 +71,6 @@ proc convertToExpression*(
 
 
 when isMainModule:
-  echo ""
-  echo ""
-
   let g = newGraph(
     @["A", "B", "C", "D", "E", "F"],
     @[["A", "B"],
@@ -85,6 +82,6 @@ when isMainModule:
       ["B", "D"],
       ["B", "E"]])
 
-
-  var result: seq[int] = calcChromaticPolynormal(g)
+  let pd = newProgressData(updateFreq = 1000)
+  var result: seq[int] = calcChromaticPolynormal(g, pd)
   echo(convertToExpression(result))

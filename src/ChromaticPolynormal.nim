@@ -1,10 +1,9 @@
 import class/graph
+import class/progressdata
 import module/calculator
 
-when isMainModule:
-  echo ""
-  echo ""
 
+when isMainModule:
   let g = newGraph(
     @["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "v10", "v11", "v12",
       "v13", "v14", "v15", "v16", "v17", "v18", "v19", "v20"],
@@ -41,7 +40,7 @@ when isMainModule:
       ["v20", "v16"]
     ])
 
-
-  var result: seq[int] = calcChromaticPolynormal(g)
+  let pd = newProgressData(updateFreq = 100000)
+  var result: seq[int] = calcChromaticPolynormal(g, pd)
   echo(convertToExpression(result))
 
